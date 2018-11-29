@@ -27,7 +27,7 @@ GET "/member-schedule"
  - confirmed activities
 
 
-POST "commitment-creation"
+POST "/commitment-creation"
  - creates commitment
 
 
@@ -43,6 +43,8 @@ DELETE "/team-schedule/{team_name}"
 
 GET "/activity-proposal"
  - load activity proposal form
+ - check with member schedules
+ - what teams member is a part of
 
 POST "/activity-proposal"
  - new activity

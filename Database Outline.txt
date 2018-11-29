@@ -1,0 +1,42 @@
+Database Elements
+
+Member:
+    - Username (Primary Key)
+    - Password
+    - Name
+    - Email Address
+    - CORE_HOURS
+
+Member / Team (Many to Many):
+    - Username
+    - Team_ID
+
+Team:
+    - ID (Incremented Primary Key)
+    - Team Name
+    -
+
+Activity:
+    - ID (Incremented PK)
+    - Team_ID
+    - Confirmed (0/1)
+
+Activity_Response (Many to Many):
+    - Activity_ID
+    - Username
+    - Accept (0/1)
+    - Responded (0/1)
+
+Proposed Time For Activity (One Activity to Many Times):
+    - ID (Incremented PK)
+    - Activity_ID
+    - Start_Time
+    - End_Time
+
+Commitments:
+    - ID (Incremented PK)
+    - Username
+    - Title
+    - Start_Time (datetime)
+    - End_Time (datetime)
+    - Location

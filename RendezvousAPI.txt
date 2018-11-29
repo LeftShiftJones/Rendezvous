@@ -1,0 +1,49 @@
+Rendezvous API
+
+GET "/"
+ - load home page
+
+POST "/"
+ - log in
+
+
+GET "/member-profile"
+ - loads member profile page
+ - user proposed activities
+
+POST "/member-profile"
+ - update core hours
+ - join/create team
+ - confirm activity
+ - update commitments
+
+DELETE "/member-profile"
+ - confirm activity time: delete other times
+ - delete commitments
+
+
+GET "/member-schedule"
+ - member commitments
+ - confirmed activities
+
+
+POST "commitment-creation"
+ - creates commitment
+
+
+GET "/team-schedule/{team_name}"
+ - loads proposed, confirmed activities
+
+POST "/team-schedule/{team_name}"
+ - voting on proposed activities
+
+DELETE "/team-schedule/{team_name}"
+ - leave team
+
+
+GET "/activity-proposal"
+ - load activity proposal form
+
+POST "/activity-proposal"
+ - new activity
+

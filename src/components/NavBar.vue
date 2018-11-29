@@ -1,10 +1,9 @@
 <template>
     <v-toolbar dark color="primary">
-        <v-toolbar-side-icon></v-toolbar-side-icon>
 
         <router-link v-bind:to="{ name: 'home-page' }">
             <v-toolbar-title class="white--text">
-                Single Page App
+                Rendezvous Scheduling App
             </v-toolbar-title>
         </router-link>
 

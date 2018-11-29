@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-Vue.congif.productionTip = false;
+Vue.config.productionTip = false;
 
 import Vuetify from "vuetify";
 

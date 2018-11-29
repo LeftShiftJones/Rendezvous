@@ -46,10 +46,43 @@ async function init() {
             method: 'GET',
             path: '/',
             config: {
-                description: 'Home page'
+                description: 'Home page',
+                validate: {
+                    payload: {
+                        username: Joi().string().required(),
+                        password: Joi().string.required()
+                    }
+                }
             },
             handler: async (request, h) => {
                 return h.view('index.html');
+            }
+        },
+        {
+            method: 'GET',
+            path: '/',
+            config: {
+                description: 'Get User Credentials'
+            },
+            handler: async(request, h) => {
+                let username = await knex("members")
+                    .select('username')
+                    .where('username', request.payload.username);
+                if(username == 0) {
+                    return {
+                        ok: false,
+                        msge: `No account with the username '${request.payload.username}' exists`
+                    };
+                }
+                let passwords_match = await knex("members")
+                    .where("username", request.payload.username)
+                    .where("password", request.payload.password);
+                if(passwords_match == 0) {
+                    return {
+                        ok: false,
+                        msge: `Incorrect password for ${request.payload.username}`
+                    };
+                }
             }
         },
         {

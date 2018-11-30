@@ -46,23 +46,23 @@ async function init() {
             method: 'GET',
             path: '/',
             config: {
-                description: 'Home page',
+                description: 'Home page'
+            },
+            handler: async (request, h) => {
+                return h.view('index.html');
+            }
+    }/*,
+        {
+            method: 'GET',
+            path: '/',
+            config: {
+                description: 'Get User Credentials',
                 validate: {
                     payload: {
                         username: Joi.string().required(),
                         password: Joi.string().required()
                     }
                 }
-            },
-            handler: async (request, h) => {
-                return h.view('index.html');
-            }
-        },
-        {
-            method: 'GET',
-            path: '/',
-            config: {
-                description: 'Get User Credentials'
             },
             handler: async(request, h) => {
                 let username = await knex("members")
@@ -83,8 +83,10 @@ async function init() {
                         msge: `Incorrect password for ${request.payload.username}`
                     };
                 }
+                return h.view('index.html');
+
             }
-        },
+        }*/,
         {
             method: "GET",
             path: "/{param*}",

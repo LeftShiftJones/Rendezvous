@@ -5,8 +5,8 @@
         <p class="body-1">This is a web site. I made this</p>
         <v-form vmodel="valid">
             <v-text-field
-                v-model="username"
-                label="Username"
+                v-model="email"
+                label="Email address"
                 required
             ></v-text-field>
             <v-text-field
@@ -15,7 +15,7 @@
                 label="Non-trivial password"
                 required
             ></v-text-field>
-            <v-btn v-bind:disabled="!valid" v-on:click="handleSubmit"
+            <v-btn v-bind:disabled="valid" v-on:click="handleSubmit"
                 >Login
             </v-btn>
         </v-form><div class="text-xs-center">
@@ -53,7 +53,7 @@ export default {
     data: function() {
         return {
             valid: false,
-            username: "",
+            email: "",
             password: "",
 
             dialogHeader: "<no dialogHeader>",
@@ -71,12 +71,13 @@ export default {
         handleSubmit: function() {
             axios
                 .get("/api/members", {
-                    username: this.username,
+                    email: this.email,
                     password: this.password,
                 })
                 .then(result => {
                     if (result.data.ok) {
                         this.showDialog("Success", result.data.msge);
+                        this.$root.currentUser = this.email;``
                     } else {
                         this.showDialog("Sorry", result.data.msge);
                     }
@@ -92,6 +93,15 @@ export default {
             this.dialogVisible = false;
             this.$router.push({ name: "home-page" });
         }
-    }
+    },
+  computed: {
+      currentUser: function() {
+        if (this.$root.currentUser) {
+          return this.$root.currentUser;
+        } else {
+          return "No one logged in";
+        }
+      }
+  }
 };
 </script>

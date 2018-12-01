@@ -5,10 +5,10 @@ const Path = require("path");
 const knex = require("knex")({
     client: "pg",
     connection: {
-        host: "SERVER",
-        database: "DB",
+        host: "DATABASE",
+        database: "DATA",
         user: "USER",
-        password: "NOTREALPASSWORD"
+        password: "PASSWORD"
     }
 });
 
@@ -51,42 +51,41 @@ async function init() {
             handler: async (request, h) => {
                 return h.view('index.html');
             }
-    }/*,
+    },
         {
-            method: 'GET',
-            path: '/',
+            method: 'POST',
+            path: '/api/members',
             config: {
                 description: 'Get User Credentials',
                 validate: {
                     payload: {
-                        username: Joi.string().required(),
+                        email: Joi.string().required(),
                         password: Joi.string().required()
                     }
                 }
             },
             handler: async(request, h) => {
-                let username = await knex("members")
-                    .select('username')
-                    .where('username', request.payload.username);
-                if(username == 0) {
+                let email = await knex("members")
+                    .select('email')
+                    .where('email', request.payload.email);
+                if(email.length == 0) {
                     return {
                         ok: false,
-                        msge: `No account with the username '${request.payload.username}' exists`
+                        msge: `No account with the email '${request.payload.email}' exists`
                     };
                 }
                 let passwords_match = await knex("members")
-                    .where("username", request.payload.username)
+                    .where("email", request.payload.email)
                     .where("password", request.payload.password);
-                if(passwords_match == 0) {
+                if(passwords_match.length == 0) {
                     return {
                         ok: false,
-                        msge: `Incorrect password for ${request.payload.username}`
+                        msge: `Incorrect password for ${request.payload.email}`
                     };
                 }
                 return h.view('index.html');
-
             }
-        }*/,
+        },
         {
             method: "GET",
             path: "/{param*}",

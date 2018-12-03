@@ -6,12 +6,14 @@
         <v-form vmodel="valid">
             <v-text-field
                 v-model="email"
+                v-bind:rules="rules.required"
                 label="Email address"
                 required
             ></v-text-field>
             <v-text-field
                 v-model="password"
                 type="password"
+                v-bind:rules="rules.required"
                 label="Non-trivial password"
                 required
             ></v-text-field>
@@ -78,7 +80,7 @@ export default {
                     if (result.data.ok) {
                         this.showDialog("Success", result.data.msge);
                         this.$root.currentUser = this.email;
-                        console.log(`${this.$root.currentUser}`);
+                        //console.log(`${this.$root.currentUser}`);
                     } else {
                         this.showDialog("Sorry", result.data.msge);
                     }

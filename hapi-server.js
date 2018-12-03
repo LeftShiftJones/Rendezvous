@@ -1,15 +1,10 @@
 // Standard Node modules
 const Path = require("path");
-
+const connection = require('./login.js');
 // Knex
 const knex = require("knex")({
     client: "pg",
-    connection: {
-        host: "DATABASE",
-        database: "DATA",
-        user: "USER",
-        password: "PASSWORD"
-    }
+    connection: connection
 });
 
 // Hapi
@@ -83,7 +78,11 @@ async function init() {
                         msge: `Incorrect password for ${request.payload.email}`
                     };
                 }
-                return h.view('index.html');
+                //return h.view('index.html');
+                return {
+                    ok: true,
+                    msge: `You have successfully logged in`
+                };
             }
         },
         {

@@ -1,11 +1,11 @@
 <template>
     <v-toolbar dark color="primary">
 
-        <router-link v-bind:to="{ name: 'home-page' }">
+        <!--router-link v-bind:to="{ name: 'home-page' }"-->
             <v-toolbar-title class="white--text">
                 Rendezvous Scheduling App
             </v-toolbar-title>
-        </router-link>
+        <!--/router-link-->
 
         <v-spacer></v-spacer>
 

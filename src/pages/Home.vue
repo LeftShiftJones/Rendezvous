@@ -70,14 +70,15 @@ export default {
     methods: {
         handleSubmit: function() {
             axios
-                .get("/api/members", {
+                .post("/api/members", {
                     email: this.email,
                     password: this.password,
                 })
                 .then(result => {
                     if (result.data.ok) {
                         this.showDialog("Success", result.data.msge);
-                        this.$root.currentUser = this.email;``
+                        this.$root.currentUser = this.email;
+                        console.log(`${this.$root.currentUser}`);
                     } else {
                         this.showDialog("Sorry", result.data.msge);
                     }
@@ -91,7 +92,7 @@ export default {
         },
         hideDialog: function() {
             this.dialogVisible = false;
-            this.$router.push({ name: "home-page" });
+            this.$router.push({ name: "profile" });
         }
     },
   computed: {

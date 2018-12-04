@@ -3,6 +3,7 @@
         <h4 class="display-1">Welcome, {{ this.$root.currentUser }}</h4>
         
         <div id="core_hours">
+            <h5 class="display-1">Set Core Hours</h5> <!--this display style needs fixed, should be easy vuetify thing -->
             <v-form vmodel="valid">
                 <v-select style="width: 145px;"
                     :items="items"
@@ -14,14 +15,73 @@
                     persistent-hint
                 ></v-select>
 
-                
-                <v-time-picker style="margin: 10px;" format="24hr" v-model="startTime" landscape width="200"></v-time-picker>
-                <label for="startTime">Start Time</label>
-                <v-time-picker style="margin: 10px;" format="24hr" v-model="endTime"   landscape width="200"></v-time-picker>
-                <label for="endTime">Start Time</label>
+                <!--The following allows our time picker to be stored in menus for a cleaner interface -->
+                <!--Note that though the user enters time in am/pm format, the time is returned in 24hr format -->
+                <v-layout row wrap>
+                    <v-flex xs11 sm5>
+                        <v-menu
+                                ref="startMenu"
+                                :close-on-content-click="false"
+                                v-model="startTimeMenu"
+                                :nudge-right="40"
+                                :return-value.sync="time"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                max-width="500px"
+                                min-width="500px"
+                        >
+                            <v-text-field
+                                    slot="activator"
+                                    v-model="startTime"
+                                    label="Start time"
+                                    prepend-icon="access_time"
+                                    readonly
+                            ></v-text-field>
+                            <v-time-picker
+                                    v-if="startTimeMenu"
+                                    v-model="startTime"
+                                    full-width
+                                    @change="$refs.menu.save(startTime)"
+                                    landscape
+                            ></v-time-picker>
+                        </v-menu>
+                    </v-flex>
+
+                    <v-flex xs11 sm5>
+                        <v-menu
+                                ref="endMenu"
+                                :close-on-content-click="false"
+                                v-model="endTimeMenu"
+                                :nudge-right="40"
+                                :return-value.sync="time"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                max-width="500px"
+                                min-width="500px"
+                        >
+                            <v-text-field
+                                    slot="activator"
+                                    v-model="endTime"
+                                    label="End time"
+                                    prepend-icon="access_time"
+                                    readonly
+                            ></v-text-field>
+                            <v-time-picker
+                                    v-if="endTimeMenu"
+                                    v-model="endTime"
+                                    full-width
+                                    @change="$refs.menu.save(endTime)"
+                                    landscape
+                            ></v-time-picker>
+                        </v-menu>
+                    </v-flex>
+                </v-layout>
             </v-form>
-        </div>
-        
+    </div>
     </div>
 </template>
 
@@ -52,7 +112,11 @@ export default {
             { text: 'Thursday', value: 4 },
             { text: 'Friday', value: 5 },
             { text: 'Saturday', value: 6 }
-        ]
+        ],
+      startTime: null,
+      endTime: null,
+      startTimeMenu: false,
+      endTimeMenu: false,
     })
 }
 </script>

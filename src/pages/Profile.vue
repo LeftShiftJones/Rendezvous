@@ -78,6 +78,26 @@
                 </v-layout>
                 <v-btn v-on:click="update_core_hours">Submit</v-btn>
             </v-form>
+            <div class="text-xs-center">
+            <v-dialog v-model="dialogVisible" width="500">
+                <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                        Core Hours Updated
+                    </v-card-title>
+
+                    <v-card-text> You have successfully updated your core hours. </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" flat v-on:click="hideDialog"
+                            >Okay</v-btn
+                        >
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </div>
         </div>
     </v-container>
 
@@ -115,33 +135,47 @@ export default {
             startTimeMenu: false,
             endTimeMenu: false,
             send_start: null,
-            send_end: null
+            send_end: null,
+
+            dialogVisible: false
         }
     },
     methods: {
         update_core_hours: function() {
-            //console.log("update_core_hours called");
-            this.send_start = this.startTime + ":00";
-            this.send_end = this.endTime + ":00";
-            axios
-                .patch("/api/core_hours", {
-                    email: this.$root.currentUser,
-                    day: this.day_to_change,
-                    startTime: this.send_start,
-                    endTime: this.send_end,
-                })
-                .then(result => {
-                    if(result.data.ok) {
-                        // eslint-disable-next-line
-                        console.log(`Result is okay: ${result.data.msge}`);
-                    } else {
-                        // eslint-disable-next-line
-                        console.log(`Result is NOT okay: ${result.data.msge}`);
-                    }
-                })
+          //console.log("update_core_hours called");
+          this.send_start = this.startTime + ":00";
+          this.send_end = this.endTime + ":00";
+          axios
+            .patch("/api/core_hours", {
+              email: this.$root.currentUser,
+              day: this.day_to_change,
+              startTime: this.send_start,
+              endTime: this.send_end,
+            })
+            .then(result => {
+              if (result.data.ok) {
                 // eslint-disable-next-line
-                .catch(err=> console.log(`Failed: ${err}`));
-        }
+                console.log(`Result is okay: ${result.data.msge}`);
+                this.showDialog();
+              } else {
+                // eslint-disable-next-line
+                console.log(`Result is NOT okay: ${result.data.msge}`);
+              }
+            })
+            // eslint-disable-next-line
+            .catch(err => console.log(`Failed: ${err}`));
+        },
+
+      showDialog: function() {
+        this.dialogVisible = true;
+        this.day_to_change= null;
+        this.startTime= null;
+        this.endTime = null
+      },
+      hideDialog: function() {
+        this.dialogVisible = false;
+        this.$router.push({ name: "profile" });
+      }
     }
 }
 </script>

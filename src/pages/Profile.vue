@@ -40,6 +40,7 @@
                             <v-time-picker
                                     v-if="startTimeMenu"
                                     v-model="startTime"
+                                    dark="true"
                                     full-width
                                     landscape
                             ></v-time-picker>
@@ -100,8 +101,8 @@ export default {
     data: function() {
         return {
             day_to_change: null,
-            startTime: null,
-            endTime: null,
+            startTime: "",
+            endTime: "",
             items: [
                 { text: 'Sunday',    value: 0 },
                 { text: 'Monday',    value: 1 },
@@ -117,9 +118,11 @@ export default {
     },
     methods: {
         update_core_hours: function() {
-            console.log("update_core_hours called");
+            //console.log("update_core_hours called");
+            this.startTime = this.startTime + ":00";
+            this.endTime = this.endTime + ":00";
             axios
-                .post("/api/core_hours", {
+                .patch("/api/core_hours", {
                     email: this.$root.currentUser,
                     day: this.day_to_change,
                     startTime: this.startTime,

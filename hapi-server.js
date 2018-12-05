@@ -86,7 +86,7 @@ async function init() {
             }
         },
         {
-            method: 'POST',
+            method: 'PATCH',
             path: '/api/core_hours',
             config: {
                 description: 'Update core hours',
@@ -94,25 +94,35 @@ async function init() {
                     payload: {
                         email: Joi.string().required(),
                         day: Joi.number().required(),
-                        startTime: Joi.string().required(),
-                        endTime: Joi.string().required()
+                        startTime: Joi.required(),
+                        endTime: Joi.required()
                     }
                 }
             },
             handler: async(request, h) => {
                 console.log("Handler reached");
+                console.log(`${request.payload.email} \n${request.payload.day} \n${request.payload.startTime}  \n${request.payload.endTime}`);
                 //if(request.payload.startTime >= request.payload.endTime) {
-                    let success = await knex("core_hours")
-                        .where("day_of_week", request.payload.day)
-                        .where("email", request.payload.day)
-                        .update({
-                            available_start: request.payload.startTime,
-                            available_end: request.payload.endTime
-                        });
-                    if(success) {
-                        console.log(`Update was successful`);
-                    }
+                let success = await knex("core_hours")
+                    .where("day_of_week", request.payload.day)
+                    .where("email", request.payload.day)
+                    .update('available_start', request.payload.startTime)
+                    .update('available_end', request.payload.endTime);
+                console.log(success);
+                
+                if(success == 1) {
+                    return {
+                        ok: true,
+                        msge: 'It worked'
+                    };
+                } else {
+                    return {
+                        ok: !true,
+                        msge: '!It worked'
+                    };
+                }
                 //}
+                
             }
         },
         {

@@ -1,8 +1,7 @@
 <template>
     <div>
-        <h4 class="display-1">Welcome to Rendezvous &copy;</h4>
+        <h4 class="display-1">Welcome to Rendezvous</h4>
 
-        <p class="body-1">This is a web site. I made this</p>
         <v-form vmodel="valid">
             <v-text-field
                 v-model="email"

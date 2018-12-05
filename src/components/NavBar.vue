@@ -13,7 +13,7 @@
 
         <v-btn flat v-bind:to="{ name: 'member-schedule' }">My Schedule</v-btn>
 
-        <v-btn flat v-bind:to="{ name: 'team-schedule' }">Team Schedule</v-btn>
+        <!--v-btn flat v-bind:to="{ name: 'team-schedule' }">Team Schedule</v-btn-->
 
         <v-btn flat icon v-bind:to="{ name: 'home-page' }" v-on:click="logoutUser">
             <v-icon>exit_to_app</v-icon>
@@ -28,7 +28,7 @@ export default {
         logoutUser: function() {
             if(this.$root.currentUser != null) {
                 this.$root.currentUser = null;
-                alert(`You have been logged out`);
+                //alert(`You have been logged out`);
             }
         }
     }

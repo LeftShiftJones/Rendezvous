@@ -35,7 +35,6 @@
                                     v-model="startTime"
                                     label="Start time"
                                     prepend-icon="access_time"
-                                    @change="update_start"
                                     readonly
                             ></v-text-field>
                             <v-time-picker
@@ -71,7 +70,6 @@
                                     v-if="endTimeMenu"
                                     v-model="endTime"
                                     full-width
-                                    @change="update_end"
                                     landscape
                             ></v-time-picker>
                         </v-menu>
@@ -79,10 +77,7 @@
                 </v-layout>
                 <v-btn>Sumbit</v-btn>
             </v-form>
-
-        
-
-    </div>
+        </div>
     </v-container>
 
     <v-container>
@@ -99,9 +94,6 @@
 
 <script>
 import axios from "axios";
-let startTime;
-let endTime;
-//import DatePicker from 'vue2-datepicker';
 
 export default {
      name: "ProfilePage",
@@ -124,20 +116,9 @@ export default {
         }
     },
     methods: {
-        update_start: function(time) {
-            startTime = time;
-            // eslint-disable-next-line
-            console.log(`Start time is: ${startTime}`);
-        },
-        update_end: function(time) {
-            endTime = time;
-            // eslint-disable-next-line
-            console.log(`End time is: ${endTime}`);
-        },
-        update_core_hours: function() {
-
+        update_core_hours: () => {
             axios
-                .post("/api/{email}/core_hours", {
+                .post("/api/core_hours", {
                     email: this.$root.currentUser,
                     day: this.day_to_change,
                     startTime: this.startTime,
@@ -145,16 +126,15 @@ export default {
                 })
                 .then(result => {
                     if(result.data.ok) {
+                        // eslint-disable-next-line
                         console.log(`Result is okay: ${result.data.msge}`);
                     } else {
+                        // eslint-disable-next-line
                         console.log(`Result is NOT okay: ${result.data.msge}`);
                     }
                 })
-                .catch(err=> console.log(`Failed: ${result.data.msge}`));
-
-            //SQL patch to change/update core hours
-            day_to_change = day_to_change + "";
-            
+                // eslint-disable-next-line
+                .catch(err=> console.log(`Failed: ${result.data.msge}`));            
         }
     }
 }

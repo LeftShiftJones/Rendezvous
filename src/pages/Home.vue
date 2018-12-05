@@ -80,7 +80,7 @@ export default {
                     if (result.data.ok) {
                         this.showDialog("Success", result.data.msge);
                         this.$root.currentUser = this.email;
-                        //console.log(`${this.$root.currentUser}`);
+                        //this.$router.push({ name: "profile" });
                     } else {
                         this.showDialog("Sorry", result.data.msge);
                     }
@@ -98,7 +98,7 @@ export default {
         }
     },
   computed: {
-      currentUser: function() {
+      currentUser: () => {
         if (this.$root.currentUser) {
           return this.$root.currentUser;
         } else {

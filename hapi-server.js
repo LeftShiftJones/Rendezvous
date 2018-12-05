@@ -87,7 +87,7 @@ async function init() {
         },
         {
             method: 'POST',
-            path: '/api/{email}/core_hours',
+            path: '/api/core_hours',
             config: {
                 description: 'Update core hours',
                 validate: {
@@ -104,8 +104,10 @@ async function init() {
                     let success = await knex("core_hours")
                         .where("day_of_week", day)
                         .where("email", email)
-                        .update("available_start", startTime)
-                        .update("available_end", endTime);
+                        .update({
+                            available_start: startTime,
+                            available_end: endTime
+                        });
                     if(success) {
                         console.log(`Update was successful`);
                     }

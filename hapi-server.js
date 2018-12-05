@@ -105,7 +105,7 @@ async function init() {
                 //if(request.payload.startTime >= request.payload.endTime) {
                 let success = await knex("core_hours")
                     .where("day_of_week", request.payload.day)
-                    .where("email", request.payload.day)
+                    .where("email", request.payload.email)
                     .update('available_start', request.payload.startTime)
                     .update('available_end', request.payload.endTime);
                 console.log(success);

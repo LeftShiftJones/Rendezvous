@@ -113,20 +113,22 @@ export default {
                 { text: 'Saturday',  value: 6 }
             ],
             startTimeMenu: false,
-            endTimeMenu: false
+            endTimeMenu: false,
+            send_start: null,
+            send_end: null
         }
     },
     methods: {
         update_core_hours: function() {
             //console.log("update_core_hours called");
-            this.startTime = this.startTime + ":00";
-            this.endTime = this.endTime + ":00";
+            this.send_start = this.startTime + ":00";
+            this.send_end = this.endTime + ":00";
             axios
                 .patch("/api/core_hours", {
                     email: this.$root.currentUser,
                     day: this.day_to_change,
-                    startTime: this.startTime,
-                    endTime: this.endTime,
+                    startTime: this.send_start,
+                    endTime: this.send_end,
                 })
                 .then(result => {
                     if(result.data.ok) {

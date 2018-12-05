@@ -23,7 +23,6 @@
                                 :close-on-content-click="false"
                                 v-model="startTimeMenu"
                                 :nudge-right="40"
-                                :return-value.sync="time"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -54,7 +53,6 @@
                                 :close-on-content-click="false"
                                 v-model="endTimeMenu"
                                 :nudge-right="40"
-                                :return-value.sync="time"
                                 lazy
                                 transition="scale-transition"
                                 offset-y

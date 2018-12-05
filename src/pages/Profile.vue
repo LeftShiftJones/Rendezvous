@@ -75,19 +75,19 @@
                         </v-menu>
                     </v-flex>
                 </v-layout>
-                <v-btn>Sumbit</v-btn>
+                <v-btn v-on:click="update_core_hours">Submit</v-btn>
             </v-form>
         </div>
     </v-container>
 
-    <v-container>
+    <!--v-container>
        <h5 class="headline">Manage Teams</h5>
         List teams here?
     </v-container>
 
     <v-container>
         <h5 class="headline">Manage Proposed Commitments</h5>
-    </v-container>
+    </v-container-->
     </div>
 </template>
 
@@ -116,7 +116,8 @@ export default {
         }
     },
     methods: {
-        update_core_hours: () => {
+        update_core_hours: function() {
+            console.log("update_core_hours called");
             axios
                 .post("/api/core_hours", {
                     email: this.$root.currentUser,
@@ -134,7 +135,7 @@ export default {
                     }
                 })
                 // eslint-disable-next-line
-                .catch(err=> console.log(`Failed: ${result.data.msge}`));            
+                .catch(err=> console.log(`Failed: ${err}`));
         }
     }
 }

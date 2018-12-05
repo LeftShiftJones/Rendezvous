@@ -1,9 +1,9 @@
 <template>
     <div>
         <h4 class="display-1">Welcome, {{ this.$root.currentUser }}</h4>
-        
+        <v-container>
         <div id="core_hours">
-            <h5 class="display-1">Set Core Hours</h5> <!--this display style needs fixed, should be easy vuetify thing -->
+            <h5 class="headline">Set Core Hours</h5>
             <v-form vmodel="valid">
                 <v-select style="width: 145px;"
                     :items="items"
@@ -82,6 +82,16 @@
                 </v-layout>
             </v-form>
     </div>
+    </v-container>
+
+    <v-container>
+       <h5 class="headline">Manage Teams</h5>
+        List teams here?
+    </v-container>
+
+    <v-container>
+        <h5 class="headline">Manage Proposed Commitments</h5>
+    </v-container>
     </div>
 </template>
 

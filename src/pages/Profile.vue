@@ -10,7 +10,7 @@
                     :menu-props="{ maxHeight: '400' }"
                     label="Select"
                     hint="Select the day of the week"
-                    @change="update_day_of_week"
+                    v-model="day_to_change"
                     persistent-hint
                 ></v-select>
 
@@ -99,7 +99,6 @@
 
 <script>
 import axios from "axios";
-let day_to_change = "";
 let startTime;
 let endTime;
 //import DatePicker from 'vue2-datepicker';
@@ -108,6 +107,7 @@ export default {
      name: "ProfilePage",
     data: function() {
         return {
+            day_to_change: null,
             startTime: null,
             endTime: null,
             items: [
@@ -124,11 +124,6 @@ export default {
         }
     },
     methods: {
-        update_day_of_week: function(weekday) {
-            day_to_change = weekday;
-            // eslint-disable-next-line
-            console.log(`${day_to_change}`);
-        },
         update_start: function(time) {
             startTime = time;
             // eslint-disable-next-line

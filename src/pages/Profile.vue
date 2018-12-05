@@ -7,7 +7,6 @@
             <v-form vmodel="valid">
                 <v-select style="width: 145px;"
                     :items="items"
-                    v-model="e6"
                     :menu-props="{ maxHeight: '400' }"
                     label="Select"
                     hint="Select the day of the week"
@@ -37,13 +36,13 @@
                                     v-model="startTime"
                                     label="Start time"
                                     prepend-icon="access_time"
+                                    @change="update_start"
                                     readonly
                             ></v-text-field>
                             <v-time-picker
                                     v-if="startTimeMenu"
                                     v-model="startTime"
                                     full-width
-                                    @change="$refs.menu.save(startTime)"
                                     landscape
                             ></v-time-picker>
                         </v-menu>
@@ -74,13 +73,17 @@
                                     v-if="endTimeMenu"
                                     v-model="endTime"
                                     full-width
-                                    @change="$refs.menu.save(endTime)"
+                                    @change="update_end"
                                     landscape
                             ></v-time-picker>
                         </v-menu>
                     </v-flex>
                 </v-layout>
+                <v-btn>Sumbit</v-btn>
             </v-form>
+
+        
+
     </div>
     </v-container>
 
@@ -97,31 +100,66 @@
 
 
 <script>
+import axios from "axios";
 let day_to_change = "";
+let startTime;
+let endTime;
 //import DatePicker from 'vue2-datepicker';
 
 export default {
-    //components: {DatePicker},
+     name: "ProfilePage",
+    data: {
+        startTime: null,
+        endTime: null
+    },
     methods: {
-        update_day_of_week(weekday) {
+        update_day_of_week: function(weekday) {
             day_to_change = weekday;
             // eslint-disable-next-line
             console.log(`${day_to_change}`);
         },
-        update_core_hours() {
+        update_start: function(time) {
+            startTime = time;
+            // eslint-disable-next-line
+            console.log(`Start time is: ${startTime}`);
+        },
+        update_end: function(time) {
+            endTime = time;
+            // eslint-disable-next-line
+            console.log(`End time is: ${endTime}`);
+        },
+        update_core_hours: function() {
+
+            axios
+                .post("/api/{email}/core_hours", {
+                    email: this.$root.currentUser,
+                    day: this.day_to_change,
+                    startTime: this.startTime,
+                    endTime: this.endTime,
+                })
+                .then(result => {
+                    if(result.data.ok) {
+                        console.log(`Result is okay: ${result.data.msge}`);
+                    } else {
+                        console.log(`Result is NOT okay: ${result.data.msge}`);
+                    }
+                })
+                .catch(err=> console.log(`Failed: ${result.data.msge}`));
+
             //SQL patch to change/update core hours
             day_to_change = day_to_change + "";
+            
         }
     },
     data: () => ({
         items: [
-            { text: 'Sunday', value: 0 },
-            { text: 'Monday', value: 1 },
-            { text: 'Tuesday', value: 2 },
+            { text: 'Sunday',    value: 0 },
+            { text: 'Monday',    value: 1 },
+            { text: 'Tuesday',   value: 2 },
             { text: 'Wednesday', value: 3 },
-            { text: 'Thursday', value: 4 },
-            { text: 'Friday', value: 5 },
-            { text: 'Saturday', value: 6 }
+            { text: 'Thursday',  value: 4 },
+            { text: 'Friday',    value: 5 },
+            { text: 'Saturday',  value: 6 }
         ],
       startTime: null,
       endTime: null,

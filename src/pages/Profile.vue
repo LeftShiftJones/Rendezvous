@@ -108,9 +108,22 @@ let endTime;
 
 export default {
      name: "ProfilePage",
-    data: {
-        startTime: null,
-        endTime: null
+    data: function() {
+        return {
+            startTime: null,
+            endTime: null,
+            items: [
+                { text: 'Sunday',    value: 0 },
+                { text: 'Monday',    value: 1 },
+                { text: 'Tuesday',   value: 2 },
+                { text: 'Wednesday', value: 3 },
+                { text: 'Thursday',  value: 4 },
+                { text: 'Friday',    value: 5 },
+                { text: 'Saturday',  value: 6 }
+            ],
+            startTimeMenu: false,
+            endTimeMenu: false
+        }
     },
     methods: {
         update_day_of_week: function(weekday) {
@@ -150,21 +163,6 @@ export default {
             day_to_change = day_to_change + "";
             
         }
-    },
-    data: () => ({
-        items: [
-            { text: 'Sunday',    value: 0 },
-            { text: 'Monday',    value: 1 },
-            { text: 'Tuesday',   value: 2 },
-            { text: 'Wednesday', value: 3 },
-            { text: 'Thursday',  value: 4 },
-            { text: 'Friday',    value: 5 },
-            { text: 'Saturday',  value: 6 }
-        ],
-      startTime: null,
-      endTime: null,
-      startTimeMenu: false,
-      endTimeMenu: false,
-    })
+    }
 }
 </script>

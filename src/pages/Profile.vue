@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="display-1">Welcome, {{ this.$root.currentUser }}</h4>
+        <h4 class="display-1">Welcome, {{ this.$root.currentUserName }}.</h4>
         <v-container>
         <div id="core_hours">
             <h5 class="headline">Set Core Hours</h5>
@@ -117,7 +117,7 @@
 import axios from "axios";
 
 export default {
-     name: "ProfilePage",
+    name: "ProfilePage",
     data: function() {
         return {
             day_to_change: null,

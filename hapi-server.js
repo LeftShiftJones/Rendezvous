@@ -78,10 +78,14 @@ async function init() {
                         msge: `Incorrect password for ${request.payload.email}`
                     };
                 }
+                let name = await knex("members")
+                  .select("name")
+                  .where("email", request.payload.email);
                 //return h.view('index.html');
                 return {
                     ok: true,
-                    msge: `You have successfully logged in`
+                    msge: `You have successfully logged in`,
+                    username: name
                 };
             }
         },
@@ -112,7 +116,7 @@ async function init() {
                 if(success == 1) {
                     return {
                         ok: true,
-                        msge: 'It worked'
+                        msge: 'It worked',
                     };
                 } else {
                     return {
@@ -153,20 +157,61 @@ async function init() {
                 }
             }
         },
-        {
-            method: "GET",
-            path: "/{param*}",
-            config: {
-                description: "Production Application"
-            },
-            handler: {
-                directory: {
-                    path: ".",
-                    redirectToSlash: true,
-                    index: true
-                }
+      {
+        method: "GET",
+        path: "/{param*}",
+        config: {
+          description: "Production Application"
+        },
+        handler: {
+          directory: {
+            path: ".",
+            redirectToSlash: true,
+            index: true
+          }
         }
-    }]);
+      },
+      {
+        method: 'PATCH',
+        path: '/api/commitments',
+        config: {
+          description: 'Create new commitment',
+          validate: {
+            payload: {
+              title: Joi.string().required(),
+              location: Joi.string().required(),
+              start: Joi.required(),
+              end: Joi.required()
+            }
+          }
+        },
+        handler: async(request, h) => {
+          console.log("Handler reached");
+          console.log(`${request.payload}`);
+          let success = await knex("commitments")
+            .insert({email: this.$root.currentUser,
+              title: request.payload.title,
+              location: request.payload.location,
+              start_date_time: request.payload.start,
+              end_date_time: request.payload.end})
+            .returning('title');
+          console.log(`Added ${title}.`);
+
+          if(success == 1) {
+            return {
+              ok: true,
+              msge: 'It worked',
+            };
+          } else {
+            return {
+              ok: !true,
+              msge: '!It worked'
+            };
+          }
+
+        }
+      },
+    ]);
 
 // Start the server.
 await server.start();

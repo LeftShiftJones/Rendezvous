@@ -79,6 +79,7 @@ export default {
                     if (result.data.ok) {
                         this.showDialog("Success", result.data.msge);
                         this.$root.currentUser = this.email;
+                        this.$root.currentUserName = result.data.username[0].name;
                         //this.$router.push({ name: "profile" });
                     } else {
                         this.showDialog("Sorry", result.data.msge);

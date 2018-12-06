@@ -102,7 +102,6 @@ async function init() {
             handler: async(request, h) => {
                 console.log("Handler reached");
                 console.log(`${request.payload.email} \n${request.payload.day} \n${request.payload.startTime}  \n${request.payload.endTime}`);
-                //if(request.payload.startTime >= request.payload.endTime) {
                 let success = await knex("core_hours")
                     .where("day_of_week", request.payload.day)
                     .where("email", request.payload.email)
@@ -121,8 +120,37 @@ async function init() {
                         msge: '!It worked'
                     };
                 }
-                //}
                 
+            }
+        },
+        {
+            method: "POST",
+            path: "/api/commitments",
+            config: {
+                description: "Get user's commitments",
+                validate: {
+                    payload: {
+                        email: Joi.string().required()
+                    }
+                }
+            },
+            handler: async(request, h) => {
+                console.log(`\n\nGetting Data...\n\n`);
+                let query = await knex("commitments")
+                    .where("email", request.payload.email)
+                    .orderBy("start_date_time");
+                if(query.length > 0) {
+                    return {
+                        ok: true,
+                        msge: 'We got the data',
+                        commitments: query
+                    };
+                } else {
+                    return {
+                        ok: false,
+                        msge: 'Returned 0 commitments'
+                    }
+                }
             }
         },
         {

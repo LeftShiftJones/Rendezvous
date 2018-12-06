@@ -114,14 +114,38 @@ async function init() {
                 console.log(success);
 
                 if (success == 1) {
+                    let day_updated;
+                    switch(request.payload.day) {
+                        case 0:
+                            day_updated = "Sunday";
+                            break;
+                        case 1:
+                            day_updated = "Monday";
+                            break;
+                        case 2:
+                            day_updated = "Tuesday";
+                            break;
+                        case 3:
+                            day_updated = "Wednesday";
+                            break;
+                        case 4:
+                            day_updated = "Thursday";
+                            break;
+                        case 5:
+                            day_updated = "Friday";
+                            break;
+                        case 6:
+                            day_updated = "Saturday";
+                            break;
+                    }
                     return {
                         ok: true,
-                        msge: 'It worked',
+                        msge: `Your core hours for ${day_updated} have been updated`,
                     };
                 } else {
                     return {
-                        ok: !true,
-                        msge: '!It worked'
+                        ok: false,
+                        msge: 'We were unable to process the update'
                     };
                 }
 

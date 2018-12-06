@@ -137,7 +137,10 @@ export default {
             send_start: null,
             send_end: null,
 
+            dialogHeader: "<no dialogHeader>",
+            dialogText: "<no dialogText>",
             dialogVisible: false
+
         }
     },
     methods: {
@@ -154,16 +157,13 @@ export default {
             })
             .then(result => {
               if (result.data.ok) {
-                // eslint-disable-next-line
-                console.log(`Result is okay: ${result.data.msge}`);
-                this.showDialog();
+                this.showDialog("Success", result.data.msge);
               } else {
-                // eslint-disable-next-line
-                console.log(`Result is NOT okay: ${result.data.msge}`);
+                this.showDialog("Sorry", result.data.msge);
               }
             })
             // eslint-disable-next-line
-            .catch(err => console.log(`Failed: ${err}`));
+            .catch(err => this.showDialog("Failed", err));
         },
 
       showDialog: function() {

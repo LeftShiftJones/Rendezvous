@@ -46,7 +46,7 @@ async function init() {
             handler: async (request, h) => {
                 return h.view('index.html');
             }
-    },
+        },
         {
             method: 'POST',
             path: '/api/members',
@@ -59,11 +59,11 @@ async function init() {
                     }
                 }
             },
-            handler: async(request, h) => {
+            handler: async (request, h) => {
                 let email = await knex("members")
                     .select('email')
                     .where('email', request.payload.email);
-                if(email.length == 0) {
+                if (email.length == 0) {
                     return {
                         ok: false,
                         msge: `No account with the email '${request.payload.email}' exists`
@@ -72,15 +72,15 @@ async function init() {
                 let passwords_match = await knex("members")
                     .where("email", request.payload.email)
                     .where("password", request.payload.password);
-                if(passwords_match.length == 0) {
+                if (passwords_match.length == 0) {
                     return {
                         ok: false,
                         msge: `Incorrect password for ${request.payload.email}`
                     };
                 }
                 let name = await knex("members")
-                  .select("name")
-                  .where("email", request.payload.email);
+                    .select("name")
+                    .where("email", request.payload.email);
                 //return h.view('index.html');
                 return {
                     ok: true,
@@ -103,17 +103,17 @@ async function init() {
                     }
                 }
             },
-            handler: async(request, h) => {
-                console.log("Handler reached");
-                console.log(`${request.payload.email} \n${request.payload.day} \n${request.payload.startTime}  \n${request.payload.endTime}`);
+            handler: async (request, h) => {
+                //console.log("Handler reached");
+                //console.log(`${request.payload.email} \n${request.payload.day} \n${request.payload.startTime}  \n${request.payload.endTime}`);
                 let success = await knex("core_hours")
                     .where("day_of_week", request.payload.day)
                     .where("email", request.payload.email)
                     .update('available_start', request.payload.startTime)
                     .update('available_end', request.payload.endTime);
                 console.log(success);
-                
-                if(success == 1) {
+
+                if (success == 1) {
                     return {
                         ok: true,
                         msge: 'It worked',
@@ -124,7 +124,7 @@ async function init() {
                         msge: '!It worked'
                     };
                 }
-                
+
             }
         },
         {
@@ -138,12 +138,12 @@ async function init() {
                     }
                 }
             },
-            handler: async(request, h) => {
-                console.log(`\n\nGetting Data...\n\n`);
+            handler: async (request, h) => {
+                //console.log(`\n\nGetting Data...\n\n`);
                 let query = await knex("commitments")
                     .where("email", request.payload.email)
                     .orderBy("start_date_time");
-                if(query.length > 0) {
+                if (query.length > 0) {
                     return {
                         ok: true,
                         msge: 'We got the data',
@@ -157,65 +157,68 @@ async function init() {
                 }
             }
         },
-      {
-        method: "GET",
-        path: "/{param*}",
-        config: {
-          description: "Production Application"
-        },
-        handler: {
-          directory: {
-            path: ".",
-            redirectToSlash: true,
-            index: true
-          }
-        }
-      },
-      {
-        method: 'PATCH',
-        path: '/api/commitments',
-        config: {
-          description: 'Create new commitment',
-          validate: {
-            payload: {
-              title: Joi.string().required(),
-              location: Joi.string().required(),
-              start: Joi.required(),
-              end: Joi.required()
+        {
+            method: "GET",
+            path: "/{param*}",
+            config: {
+                description: "Production Application"
+            },
+            handler: {
+                directory: {
+                    path: ".",
+                    redirectToSlash: true,
+                    index: true
+                }
             }
-          }
         },
-        handler: async(request, h) => {
-          console.log("Handler reached");
-          console.log(`${request.payload}`);
-          let success = await knex("commitments")
-            .insert({email: this.$root.currentUser,
-              title: request.payload.title,
-              location: request.payload.location,
-              start_date_time: request.payload.start,
-              end_date_time: request.payload.end})
-            .returning('title');
-          console.log(`Added ${title}.`);
+        {
+            method: 'PATCH',
+            path: '/api/commitments',
+            config: {
+                description: 'Create new commitment',
+                validate: {
+                    payload: {
+                        email: Joi.string().required(),
+                        title: Joi.string().required(),
+                        location: Joi.string().required(),
+                        start: Joi.required(),
+                        end: Joi.required()
+                    }
+                }
+            },
+            handler: async (request, h) => {
+                console.log("Handler reached");
+                console.log(`${request.payload.start}`);
+                let success = await knex("commitments")
+                    .insert({
+                        email: request.payload.email,
+                        title: request.payload.title,
+                        location: request.payload.location,
+                        start_date_time: request.payload.start,
+                        end_date_time: request.payload.end
+                    })
+                    .returning('title');
+                console.log(`Added ${success}.`);
 
-          if(success == 1) {
-            return {
-              ok: true,
-              msge: 'It worked',
-            };
-          } else {
-            return {
-              ok: !true,
-              msge: '!It worked'
-            };
-          }
+                if (success != null) {
+                    return {
+                        ok: true,
+                        msge: 'Commitment created successfully',
+                    };
+                } else {
+                    return {
+                        ok: !true,
+                        msge: 'We encountered an error, sorry :('
+                    };
+                }
 
-        }
-      },
+            }
+        },
     ]);
 
-// Start the server.
-await server.start();
-server.logger().info(`Server running at ${server.info.uri}`);
+    // Start the server.
+    await server.start();
+    server.logger().info(`Server running at ${server.info.uri}`);
 }
 
 process.on("unhandledRejection", err => {

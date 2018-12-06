@@ -47,7 +47,7 @@ async function init() {
                 return h.view('index.html');
             }
         },
-        {
+        { //Get user credentials
             method: 'POST',
             path: '/api/members',
             config: {
@@ -89,7 +89,7 @@ async function init() {
                 };
             }
         },
-        {
+        { //Update Core hours
             method: 'PATCH',
             path: '/api/core_hours',
             config: {
@@ -151,7 +151,7 @@ async function init() {
 
             }
         },
-        {
+        { //Post to commitments
             method: "POST",
             path: "/api/commitments",
             config: {
@@ -163,25 +163,54 @@ async function init() {
                 }
             },
             handler: async (request, h) => {
-                //console.log(`\n\nGetting Data...\n\n`);
                 let query = await knex("commitments")
                     .where("email", request.payload.email)
                     .orderBy("start_date_time");
                 if (query.length > 0) {
+                    query.forEach(entry => {
+                        console.log(entry);
+                    });
                     return {
                         ok: true,
-                        msge: 'We got the data',
                         commitments: query
                     };
                 } else {
                     return {
-                        ok: false,
+                        ok: true,
+                        count: 0,
                         msge: 'Returned 0 commitments'
                     }
                 }
             }
         },
         {
+            method: "DELETE",
+            path: "/api/commitments",
+            config: {
+                description: "Delete user commitment",
+                validate: {
+                    payload: {
+                        id: Joi.required()
+                    }
+                }
+            },
+            handler: async(request, h) => {
+                console.log(request.payload.id);
+                let del = await knex("commitments")
+                    .where("commitment_id", request.payload.id)
+                    .del();
+                if(del == 1) {
+                    return {
+                        ok: true
+                    }
+                } else {
+                    return {
+                        ok: false
+                    }
+                }
+            }
+        },
+        { //Get /{param}
             method: "GET",
             path: "/{param*}",
             config: {
@@ -195,7 +224,7 @@ async function init() {
                 }
             }
         },
-        {
+        { //Create commitments
             method: 'PATCH',
             path: '/api/commitments',
             config: {

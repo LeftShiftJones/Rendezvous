@@ -36,6 +36,7 @@
                                             mdi-magnify
                                         </v-icon>
                                         <h2 class="display-1 white--text font-weight-light">{{ commitment.title }}</h2>
+                                        <v-btn flat icon color="white" v-on:click="delete_event($event, commitment.commitment_id)"><v-icon>delete</v-icon></v-btn>
                                     </v-card-title>
                                     <v-container>
                                         <v-layout>
@@ -68,7 +69,8 @@ export default {
         return {
           valid: false,
           moment: require("moment"),
-          my_commitments: null
+          my_commitments: null,
+          commitment_to_delete: null
         };
     },
     methods: {
@@ -78,18 +80,34 @@ export default {
             })
             .then(result => {
                 if(result.data.ok) {
-                    console.log(result.data.commitments);
-                    this.my_commitments = result.data.commitments;
-                } else {
-                    console.log(result.data.msge);
+                    if(result.data.count == 0) {
+                        console.log(`User has 0 events scheduled, proceed normally...`);
+                    } else {
+                        this.my_commitments = result.data.commitments;
+                    }
                 }
             })
-            .catch(err => {console.log(`There was an error: ${err}`)});
+            .catch(err => {alert(`There was an error retrieving your schedule: ${err}`)});
 
         },
-      handleCreate: function() {
-          this.$router.push({ name: 'commitment-creation' });
-      },
+        handleCreate: function() {
+            this.$router.push({ name: 'commitment-creation' });
+        },
+        delete_event: function(event, event_id) {
+            this.commitment_to_delete = event_id;
+            //console.log(event_id);
+            axios.delete("/api/commitments", {
+                id: this.commitment_to_delete
+            })
+            .then(result => {
+                if(result.data.ok) {
+                    this.$router.push({name: 'member-schedule'});
+                } else {
+                    alert(`We were unable to delete your commitment`);
+                }
+            })
+            .catch(err => {alert(`There was an issue deleting your commitment: ${err}`)});
+        }
     },
     beforeMount() {
         this.get_data();

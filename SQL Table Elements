@@ -1,0 +1,97 @@
+create table members
+(
+	email varchar(50) not null
+		constraint table_name_pkey
+			primary key,
+	password varchar(50),
+	name varchar(50)
+)
+;
+
+create table team
+(
+	team_name varchar(50) not null
+		constraint team_pkey
+			primary key
+)
+;
+
+create table team_members
+(
+	email varchar(50)
+		constraint team_members_members_username_fk
+			references members,
+	team_name varchar(50)
+		constraint team_members_team_team_name_fk
+			references team
+)
+;
+
+create table activities
+(
+	activity_id serial not null
+		constraint activities_pkey
+			primary key,
+	team_name varchar(50) not null
+		constraint activities_team_team_name_fk
+			references team,
+	confirmed integer default 0,
+	name varchar(50) not null
+)
+;
+
+create table proposed_activity_time
+(
+	proposed_time_id serial not null
+		constraint proposed_activity_time_pkey
+			primary key,
+	activity_id integer
+		constraint proposed_activity_time_activities_activity_id_fk
+			references activities,
+	start_date_time timestamp not null,
+	end_date_time timestamp not null
+)
+;
+
+create table activity_responses
+(
+	activity_id integer
+		constraint activity_responses_activities_activity_id_fk
+			references activities,
+	email varchar(50) not null,
+	response integer default 0 not null,
+	reason varchar(75)
+)
+;
+
+create table commitments
+(
+	commitment_id serial not null,
+	email varchar(50)
+		constraint commitments_members_username_fk
+			references members,
+	title varchar(75),
+	location varchar(50),
+	start_date_time timestamp not null,
+	end_date_time timestamp not null
+)
+;
+
+create table core_hours
+(
+	core_hours_id serial not null
+		constraint core_hours_pk
+			primary key,
+	email varchar(50) not null
+		constraint core_hours_members_email_fk
+			references members,
+	available_start time not null,
+	available_end time not null,
+	day_of_week integer not null
+)
+;
+
+create unique index core_hours_core_hours_id_uindex
+	on core_hours (core_hours_id)
+;
+
